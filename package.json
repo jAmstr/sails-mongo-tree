@@ -1,0 +1,25 @@
+{
+  "name": "sails-mongo-tree",
+  "version": "0.0.1",
+  "description": "A tree structure for Mongoid documents using the materialized path pattern",
+  "main": "lib/adapter.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jAmstr/sails-mongo-tree.git"
+  },
+  "keywords": [
+    "sails",
+    "waterline",
+    "mongo",
+    "tree"
+  ],
+  "author": "Jasim Sajid <jasimsajid@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jAmstr/sails-mongo-tree/issues"
+  },
+  "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme"
+}
