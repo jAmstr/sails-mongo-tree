@@ -32,5 +32,8 @@
     "features": [
       "cross-adapter"
     ]
+  },
+  "dependencies": {
+    "sails-mongo": "^0.12.2"
   }
 }
