@@ -6,12 +6,28 @@ A tree structure for sails-mongo (Waterline adapter) using the materialized path
 Install using
 `npm install sails-mongo-tree --save`
 
+In your database connection settings, change the adapter from **sails-mongo** to **sails-mongo-tree**
+
+```
+//config/connections.js
+
+someMongodbServer: {
+    adapter: 'sails-mongo-tree',
+    host: 'localhost',
+    port: 27017,
+  //   user: 'username', //optional
+  //   password: 'password', //optional
+    database: 'sails-mongo-tree-example' //optional
+  }
+  ```
+  
 **Integration**
 
 In order to transform your model into a tree like structure add a **parent** attribute to your model
 
 ```
 //api/models/User.js
+
 module.exports = {
   attributes: {
     firstName: { type: 'string' },
