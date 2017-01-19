@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "async": "^2.1.4",
-    "mongodb": "^2.2.20",
+    "mongodb": "2.1.20",
     "sails": "^0.12.11",
     "sails-mongo": "^0.12.2"
   }
