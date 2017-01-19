@@ -54,3 +54,7 @@ Get all children and grand children
 Get all ancestors including parent
 
 `Model.getAncestors(child, callback<err, [ancestors]>)`
+
+Get Level
+
+`Model.getLevel(child, callback<err, level>)`
