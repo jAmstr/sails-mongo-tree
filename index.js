@@ -20,7 +20,6 @@ module.exports = (function () {
                     currentfile = err.stack.shift().getFileName();
 
                     var files = err.stack.reverse().map( function(log) {
-                        console.log(log.getFileName())
                         return log.getFileName()
                     })
 
@@ -159,8 +158,6 @@ module.exports = (function () {
                 ids.pop()
                 return ids.length
             };
-
-            console.log(schema)
             return schema
         }
     }
