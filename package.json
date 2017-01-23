@@ -1,6 +1,6 @@
 {
   "name": "sails-mongo-tree",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A tree structure for sails-mongo (waterline) documents using the materialized path pattern",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,5 @@
     "url": "https://github.com/jAmstr/sails-mongo-tree/issues"
   },
   "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
