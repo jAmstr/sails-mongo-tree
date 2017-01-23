@@ -1,6 +1,6 @@
 {
   "name": "sails-mongo-tree",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A tree structure for Mongoid documents using the materialized path pattern",
   "main": "lib/adapter.js",
   "scripts": {
