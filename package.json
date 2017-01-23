@@ -1,8 +1,8 @@
 {
   "name": "sails-mongo-tree",
   "version": "1.0.10",
-  "description": "A tree structure for Mongoid documents using the materialized path pattern",
-  "main": "lib/adapter.js",
+  "description": "A tree structure for sails-mongo (waterline) documents using the materialized path pattern",
+  "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec"
   },
@@ -22,21 +22,6 @@
     "url": "https://github.com/jAmstr/sails-mongo-tree/issues"
   },
   "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme",
-  "waterlineAdapter": {
-    "waterlineVersion": "~0.10.0",
-    "interfaces": [
-      "semantic",
-      "queryable",
-      "associations"
-    ],
-    "features": [
-      "cross-adapter"
-    ]
-  },
   "dependencies": {
-    "async": "^2.1.4",
-    "mongodb": "2.1.20",
-    "sails": "^0.12.11",
-    "sails-mongo": "^0.12.2"
   }
 }
