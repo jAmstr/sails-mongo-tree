@@ -38,3 +38,7 @@ jspm_packages
 
 # inteliJIDE cache folder
 ,idea/*
+
+
+.DS_Store
+.idea/

@@ -9,40 +9,45 @@ module.exports = (function () {
 
             function _getCallerFile() {
                 try {
-                    var err = new Error();
-                    var callerfile;
-                    var currentfile;
+                    var err = new Error()
+                    var callerfile
+                    var currentfile
+                    var pst = Error.prepareStackTrace
 
                     Error.prepareStackTrace = function (err, stack) {
-                        return stack;
-                    };
+                        return stack
+                    }
 
-                    currentfile = err.stack.shift().getFileName();
+                    currentfile = err.stack.shift().getFileName()
 
                     var files = err.stack.reverse().map( function(log) {
                         return log.getFileName()
                     })
 
+                    Error.prepareStackTrace = pst //restore the class method
+
                     while (files.length) {
                         callerfile = files.shift()
-                        if (currentfile !== callerfile && callerfile.indexOf('/api/models/') !== -1) return callerfile;
+                        if (currentfile !== callerfile && callerfile.indexOf('/api/models/') !== -1) return callerfile
                     }
                 } catch (err) {
+                    console.log(err)
+                    return null
                 }
-                return undefined;
+                return null
             }
 
-            var modelPath = _getCallerFile();
+            var modelPath = _getCallerFile()
 
             if (!modelPath) {
-                throw 'Unable to attach model. Make sure you are calling this from api/models/';
+                throw 'Unable to attach model. Make sure you are calling this from api/models/'
                 return schema
             }
 
-            var scriptName = path.basename(modelPath);
+            var scriptName = path.basename(modelPath)
             var modelName = scriptName.replace('.js', '')
 
-            var scriptName = path.basename(modelPath);
+            var scriptName = path.basename(modelPath)
             var modelName = scriptName.replace('.js', '')
             modelName = modelName.toLowerCase()
 
@@ -54,8 +59,8 @@ module.exports = (function () {
             var selfId = '$'
             schema.attributes.path = function () {
                 if (_.isString(this.__path))
-                    return this.__path.replace(selfId, this.id);
-                return null;
+                    return this.__path.replace(selfId, this.id)
+                return null
             }
 
             var bfc = schema.breforeCreate
@@ -77,19 +82,19 @@ module.exports = (function () {
             var bfu = schema.beforeUpdate
             schema.beforeUpdate = function (values, cb) {
                 //implementation here...
-                var self = this;
+                var self = this
                 sails.models[modelName].findOne({id: values.id}).populate('parent').exec(function (err, original) {
                     if (err) return cb(err)
                     var isParentChange = original.parent.id !== values.parent
                     if (isParentChange) {
                         if (!values.parent) {
-                            values.__path = selfId;
+                            values.__path = selfId
                             if (bfu) return bfu(values, cb)
                             return cb()
                         }
 
-                        var previousPath = original.path();
-                        values.__path = original.parent.path() + pathSeparator + original.id;
+                        var previousPath = original.path()
+                        values.__path = original.parent.path() + pathSeparator + original.id
 
                         if (isParentChange) {
                             // When the parent is changed we must rewrite all children paths as well
@@ -98,7 +103,7 @@ module.exports = (function () {
                                 users.forEach(function (user) {
                                     var newPath = values.__path + user.path().substr(previousPath.length)
                                     user.__path = newPath
-                                    user.save();
+                                    user.save()
                                 })
                                 if (bfu) return bfu(values, cb)
                                 return cb()
@@ -108,7 +113,7 @@ module.exports = (function () {
                         if (bfu) return bfu(values, cb)
                         return cb()
                     }
-                });
+                })
             }
 
             var bfd = schema.beforeDestroy
@@ -123,7 +128,7 @@ module.exports = (function () {
                     if (err) return cb(err)
                     if (bfd) return bfd(values, cb)
                     return cb()
-                });
+                })
             }
 
             schema.attributes.getChildren = function (recursive, cb) {
@@ -137,7 +142,7 @@ module.exports = (function () {
 
             schema.attributes.getParent = function (cb) {
                 return sails.models[modelName].findOne({id: this.parent}, cb)
-            };
+            }
 
             var getAncestors = function (cb) {
                 if (this.path()) {
@@ -146,8 +151,8 @@ module.exports = (function () {
                 } else {
                     cb()
                 }
-                return sails.models[modelName].find().where({id: ids}).exec(cb);
-            };
+                return sails.models[modelName].find().where({id: ids}).exec(cb)
+            }
 
             schema.attributes.getAnsestors = getAncestors
             schema.attributes.getAncestors = getAncestors
@@ -157,7 +162,7 @@ module.exports = (function () {
                 var ids = this.path().split(pathSeparator)
                 ids.pop()
                 return ids.length
-            };
+            }
             return schema
         }
     }
