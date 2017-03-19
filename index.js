@@ -1,5 +1,6 @@
 var path = require('path')
 var _ = require('lodash')
+var MongoObjectId = require('sails-mongo/node_modules/mongodb').ObjectID;
 
 module.exports = (function () {
 
@@ -118,16 +119,32 @@ module.exports = (function () {
 
             var bfd = schema.beforeDestroy
             schema.beforeDestroy = function (values, cb) {
-
-                var path = (_.isString(values.__path)) ? values.__path.replace(selfId, values.id) : null
-                if (!path) {
+                var objectId = values.id ? values.id : (values.where) ? values.where.id : null
+                if(!objectId) {
                     if (bfd) return bfd(values, cb)
                     return cb()
                 }
-                sails.models[modelName].remove({__path: {startsWith: path + pathSeparator}}, function (err) {
-                    if (err) return cb(err)
-                    if (bfd) return bfd(values, cb)
-                    return cb()
+                sails.models[modelName].native(function(err, collection) {
+
+                    collection.find({'_id': MongoObjectId(objectId)}).toArray(function(err, results) {
+                        if(err || !results || results.length == 0) {
+                            if (bfd) return bfd(values, cb)
+                            return cb()
+                        }
+                        var objectToDelete = results[0]
+
+                        var path = _.isString(objectToDelete.__path) ? objectToDelete.__path.replace(selfId, objectToDelete._id) : null
+                        if (!path) {
+                            if (bfd) return bfd(values, cb)
+                            return cb()
+                        }
+                        //TODO: convert the startsWith Waterline query parameter to mongoDB $regex patterh matching ^()
+                        collection.remove({__path: {startsWith: path + pathSeparator}}, function (err) {
+                            if (err) return cb(err)
+                            if (bfd) return bfd(values, cb)
+                            return cb()
+                        })
+                    })
                 })
             }
 
