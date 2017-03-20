@@ -82,7 +82,10 @@ module.exports = (function () {
 
             var bfu = schema.beforeUpdate
             schema.beforeUpdate = function (values, cb) {
-                //implementation here...
+                var end = function() {
+                    if (bfu) return bfu(values, cb)
+                    return cb()
+                }
                 var self = this
                 sails.models[modelName].findOne({id: values.id}).populate('parent').exec(function (err, original) {
                     if (err) return cb(err)
@@ -90,8 +93,7 @@ module.exports = (function () {
                     if (isParentChange) {
                         if (!values.parent) {
                             values.__path = selfId
-                            if (bfu) return bfu(values, cb)
-                            return cb()
+                            return end()
                         }
 
                         var previousPath = original.path()
@@ -106,45 +108,43 @@ module.exports = (function () {
                                     user.__path = newPath
                                     user.save()
                                 })
-                                if (bfu) return bfu(values, cb)
-                                return cb()
+                                return end()
                             })
                         }
                     } else {
-                        if (bfu) return bfu(values, cb)
-                        return cb()
+                        return end()
                     }
                 })
             }
 
             var bfd = schema.beforeDestroy
             schema.beforeDestroy = function (values, cb) {
-                var objectId = values.id ? values.id : (values.where) ? values.where.id : null
-                if(!objectId) {
+
+                var end = function() {
                     if (bfd) return bfd(values, cb)
                     return cb()
                 }
+
+                var objectId = values.id ? values.id : (values.where) ? values.where.id : null
+                if(!objectId) {
+                    return end()
+                }
                 sails.models[modelName].native(function(err, collection) {
+                    if (err) return cb(err)
 
                     collection.find({'_id': MongoObjectId(objectId)}).toArray(function(err, results) {
-                        if(err || !results || results.length == 0) {
-                            if (bfd) return bfd(values, cb)
-                            return cb()
-                        }
-                        var objectToDelete = results[0]
+                        if (err) return cb(err)
+                        if(!results || results.length == 0) return end()
 
+                        var objectToDelete = results[0]
                         var path = _.isString(objectToDelete.__path) ? objectToDelete.__path.replace(selfId, objectToDelete._id) : null
-                        if (!path) {
-                            if (bfd) return bfd(values, cb)
-                            return cb()
-                        }
-                        //TODO: convert the startsWith Waterline query parameter to mongoDB $regex patterh matching ^()
-                        collection.remove({__path: {startsWith: path + pathSeparator}}, function (err) {
+                        if (!path) return end()
+                        var pattern = "^" + path + pathSeparator
+                        collection.remove({__path: {$regex: pattern}}, function (err) {
                             if (err) return cb(err)
-                            if (bfd) return bfd(values, cb)
-                            return cb()
+                            return end()
                         })
-                    })
+                    })np
                 })
             }
 
