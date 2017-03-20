@@ -144,7 +144,7 @@ module.exports = (function () {
                             if (err) return cb(err)
                             return end()
                         })
-                    })np
+                    })
                 })
             }
 
