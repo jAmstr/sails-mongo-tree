@@ -1,6 +1,6 @@
 {
   "name": "sails-mongo-tree",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A tree structure for sails-mongo (waterline) documents using the materialized path pattern",
   "main": "index.js",
   "scripts": {
