@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/jAmstr/sails-mongo-tree/issues"
   },
-  "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme"
+  "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme",
+  "dependencies": {
+    "sails-mongo": "^0.12.2"
+  }
 }
