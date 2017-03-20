@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/jAmstr/sails-mongo-tree#readme",
   "dependencies": {
-    "sails-mongo": "^0.12.2"
+    "mongodb": "2.1.20"
   }
 }

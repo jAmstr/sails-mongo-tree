@@ -1,6 +1,6 @@
 var path = require('path')
 var _ = require('lodash')
-var MongoObjectId = require('sails-mongo/node_modules/mongodb').ObjectID;
+var MongoObjectId = require('mongodb').ObjectID;
 
 module.exports = (function () {
 
