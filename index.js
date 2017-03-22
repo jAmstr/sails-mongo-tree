@@ -89,7 +89,7 @@ module.exports = (function () {
                 var self = this
                 sails.models[modelName].findOne({id: values.id}).populate('parent').exec(function (err, original) {
                     if (err) return cb(err)
-                    var isParentChange = original.parent.id !== values.parent
+                    var isParentChange =_.get(original, 'parent.id') !== _.get(values, 'parent')
                     if (isParentChange) {
                         if (!values.parent) {
                             values.__path = selfId
