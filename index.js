@@ -154,7 +154,7 @@ module.exports = (function () {
                     recursive = false
                 }
                 var filter = recursive ? {__path: {startsWith: this.path() + pathSeparator}} : {parent: this.id}
-                return sails.models[modelName].find().where(filter).exec(cb)
+                return sails.models[modelName].find().sort('createdAt ASC').where(filter).exec(cb)
             }
 
             schema.attributes.getParent = function (cb) {
